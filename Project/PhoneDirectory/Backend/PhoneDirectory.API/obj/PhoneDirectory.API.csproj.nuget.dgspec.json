@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj": {}
+    "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj": {
+    "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
+        "projectUniqueName": "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
         "projectName": "PhoneDirectory.API",
-        "projectPath": "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
+        "projectPath": "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
         "packagesPath": "C:\\Users\\Makcu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\obj\\",
+        "outputPath": "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Makcu\\AppData\\Roaming\\NuGet\\NuGet.Config"

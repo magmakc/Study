@@ -164,7 +164,7 @@ namespace PhoneDirectory.API.Controllers
                 query = query.Where(s => s.Position == request.Position);
             
             var totalCount = await query.CountAsync();
-            
+
             var items = await query
                 .OrderBy(s => s.FullName)
                 .Skip((request.Page - 1) * request.PageSize)
@@ -177,6 +177,8 @@ namespace PhoneDirectory.API.Controllers
                     Department = s.Department,
                     Building = s.Building,
                     OfficeNumber = s.OfficeNumber,
+                    HireDate = s.HireDate,
+                    WorkExperience = s.WorkExperience,
                     ContactInfos = s.ContactInfos.Select(ci => new ContactInfoDto
                     {
                         Id = ci.Id,
@@ -186,7 +188,7 @@ namespace PhoneDirectory.API.Controllers
                     }).ToList()
                 })
                 .ToListAsync();
-            
+
             return Ok(new PaginatedResponseDto<SubscriberCardDto>
             {
                 Items = items,
@@ -195,7 +197,7 @@ namespace PhoneDirectory.API.Controllers
                 PageSize = request.PageSize
             });
         }
-        
+
         [HttpGet("positions")]
         public async Task<IActionResult> GetPositions()
         {
@@ -207,7 +209,7 @@ namespace PhoneDirectory.API.Controllers
                     .Distinct()
                     .OrderBy(p => p)
                     .ToListAsync();
-                    
+
                 return Ok(positions);
             }
             catch (Exception ex)
@@ -263,7 +265,7 @@ namespace PhoneDirectory.API.Controllers
                 
                 // Получаем общее количество
                 var totalCount = await query.CountAsync();
-                
+
                 // Применяем пагинацию
                 var items = await query
                     .OrderBy(s => s.FullName)
@@ -277,6 +279,8 @@ namespace PhoneDirectory.API.Controllers
                         Department = s.Department,
                         Building = s.Building,
                         OfficeNumber = s.OfficeNumber,
+                        HireDate = s.HireDate,
+                        WorkExperience = s.WorkExperience,
                         ContactInfos = s.ContactInfos.Select(ci => new ContactInfoDto
                         {
                             Id = ci.Id,
@@ -286,7 +290,7 @@ namespace PhoneDirectory.API.Controllers
                         }).ToList()
                     })
                     .ToListAsync();
-                
+
                 return Ok(new PaginatedResponseDto<SubscriberCardDto>
                 {
                     Items = items,
@@ -329,6 +333,8 @@ namespace PhoneDirectory.API.Controllers
                     Department = subscriber.Department,
                     Building = subscriber.Building,
                     OfficeNumber = subscriber.OfficeNumber,
+                    HireDate = subscriber.HireDate,
+                    WorkExperience = subscriber.WorkExperience,
                     Username = username,
                     Email = subscriber.User?.Email,
                     Role = subscriber.User?.Role,

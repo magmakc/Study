@@ -23,6 +23,8 @@ namespace PhoneDirectory.API.DTOs
         public string? Department { get; set; }
         public string? Building { get; set; }
         public string? OfficeNumber { get; set; }
+        public DateTime? HireDate { get; set; }
+        public string? WorkExperience { get; set; }
         public List<ContactInfoDto> ContactInfos { get; set; } = new();
     }
     

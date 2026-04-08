@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NcIPOPYiQQU=",
+  "dgSpecHash": "DqnWZzfVMlA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Makcu\\OneDrive\\Рабочий стол\\Вторая_практика\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
+  "projectFilePath": "C:\\Users\\Makcu\\Desktop\\ИС_управления_кадрами\\Phone_project\\Project\\PhoneDirectory\\Backend\\PhoneDirectory.API\\PhoneDirectory.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Makcu\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Makcu\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

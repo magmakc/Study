@@ -1,6 +1,6 @@
 # README.md
 
-# Телефонный справочник - Инструкция по запуску
+# Управление кадрами
 
 ## Структура проекта
 
@@ -64,7 +64,7 @@ PhoneDirectory/
 
 Создайте новую базу данных:
 
-Имя: PhoneDirectoryDB1
+Имя: PhoneDB
 
 Владелец: postgres
 
@@ -77,7 +77,7 @@ PhoneDirectory/
 psql -U postgres
 
 -- Создайте базу данных
-CREATE DATABASE "PhoneDirectoryDB1";
+CREATE DATABASE "PhoneDirectoryDB";
 ```
 
 ### 3. Настройка проекта
@@ -92,7 +92,7 @@ cd PhoneDirectory
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=PhoneDirectoryDB1;Username=postgres;Password=1234"
+    "DefaultConnection": "Host=localhost;Port=5432;Database=PhoneDirectoryDB;Username=postgres;Password=12345"
   }
 }
 ```

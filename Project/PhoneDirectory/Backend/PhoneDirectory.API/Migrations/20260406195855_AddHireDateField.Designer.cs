@@ -12,8 +12,8 @@ using PhoneDirectory.API.Data;
 namespace PhoneDirectory.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251205143429_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260406195855_AddHireDateField")]
+    partial class AddHireDateField
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace PhoneDirectory.API.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("HireDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("InternalPhone")
                         .HasColumnType("text");

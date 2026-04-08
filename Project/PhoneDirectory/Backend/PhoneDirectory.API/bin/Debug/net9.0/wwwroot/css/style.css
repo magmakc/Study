@@ -713,6 +713,28 @@ main {
     opacity: 1;
 }
 
+.subscriber-experience {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #f6f8fb 0%, #f0f4f8 100%);
+    border-radius: 6px;
+    margin-top: 10px;
+    border-left: 3px solid #667eea;
+}
+
+.subscriber-experience i {
+    color: #667eea;
+    font-size: 14px;
+}
+
+.subscriber-experience span {
+    color: #4a5568;
+    font-size: 13px;
+    font-weight: 500;
+}
+
 .quick-search {
     margin-top: 20px;
     padding-top: 20px;
@@ -801,6 +823,34 @@ main {
     line-height: 1.4;
 }
 
+/* Стили для счетчика сотрудников */
+.employee-count {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #2d3748;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.employee-count i {
+    color: #667eea;
+    font-size: 18px;
+}
+
+.employee-count strong {
+    color: #667eea;
+    font-size: 16px;
+}
+
 /* Для мобильных устройств */
 @media (max-width: 768px) {
     #toast-container {
@@ -808,8 +858,16 @@ main {
         right: 20px;
         align-items: stretch;
     }
-    
+
     .toast {
         max-width: none;
+    }
+
+    .employee-count {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 10px 15px;
     }
 }

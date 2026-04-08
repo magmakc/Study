@@ -315,36 +315,39 @@ class PhoneDirectoryApp {
     
     async loadSubscribers() {
         this.showLoading(true);
-        
+
         try {
             const params = new URLSearchParams({
                 page: this.currentPage,
                 pageSize: this.pageSize
             });
-            
+
             if (this.searchTerm) {
                 params.append('searchTerm', this.searchTerm);
             }
-            
+
             if (this.departmentFilter) {
                 params.append('department', this.departmentFilter);
             }
-            
+
             if (this.positionFilter) {
                 params.append('position', this.positionFilter);
             }
-            
+
             const response = await fetch(`${this.apiBaseUrl}/directory/search?${params}`, {
                 headers: {
                     'Authorization': `Bearer ${this.token}`
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error('Ошибка загрузки данных');
             }
-            
+
             const data = await response.json();
+            console.log('Полученные данные:', data);
+            console.log('totalCount:', data.totalCount);
+            console.log('items.length:', data.items?.length);
             this.renderSubscribers(data);
             
         } catch (error) {
@@ -416,38 +419,50 @@ class PhoneDirectoryApp {
     renderSubscribers(data) {
         const container = document.getElementById('subscribers-list');
         if (!container) return;
-        
+
         container.innerHTML = '';
-        
+
         if (!data.items || data.items.length === 0) {
             container.innerHTML = '<div class="no-data">Абоненты не найдены</div>';
+            // Обновляем счетчик сотрудников - показываем 0
+            this.updateEmployeeCount(0);
             return;
         }
-        
+
         data.items.forEach(subscriber => {
             const card = this.createSubscriberCard(subscriber);
             container.appendChild(card);
         });
-        
+
+        // Обновляем счетчик сотрудников с общим количеством
+        this.updateEmployeeCount(data.totalCount);
+
         this.renderPagination(data.totalPages);
+    }
+
+    updateEmployeeCount(count) {
+        const countElement = document.getElementById('employee-count-value');
+        if (countElement) {
+            countElement.textContent = count;
+        }
     }
     
     createSubscriberCard(subscriber) {
         const card = document.createElement('div');
         card.className = 'subscriber-card';
         card.style.cursor = 'pointer';
-        
+
         card.dataset.subscriberId = subscriber.id || subscriber.Id;
-        
+
         card.addEventListener('click', async () => {
             const id = card.dataset.subscriberId;
             if (id) {
                 await this.loadAndShowSubscriberDetails(parseInt(id));
             }
         });
-        
+
         const contacts = [];
-        
+
         if (subscriber.contactInfos && subscriber.contactInfos.length > 0) {
             subscriber.contactInfos.forEach(contact => {
                 if (contact.value && contact.type) {
@@ -515,13 +530,13 @@ class PhoneDirectoryApp {
             <div class="subscriber-header">
                 <div>
                     <div class="subscriber-name">${subscriber.fullName || subscriber.FullName || 'Неизвестно'}</div>
-                    ${(subscriber.position || subscriber.Position) ? 
+                    ${(subscriber.position || subscriber.Position) ?
                         `<div class="subscriber-position">${subscriber.position || subscriber.Position}</div>` : ''}
                 </div>
-                ${(subscriber.department || subscriber.Department) ? 
+                ${(subscriber.department || subscriber.Department) ?
                     `<div class="subscriber-department">${subscriber.department || subscriber.Department}</div>` : ''}
             </div>
-            
+
             ${((subscriber.building || subscriber.Building) || (subscriber.officeNumber || subscriber.OfficeNumber)) ? `
                 <div class="subscriber-location">
                     <i class="fas fa-building"></i>
@@ -529,7 +544,14 @@ class PhoneDirectoryApp {
                     ${subscriber.officeNumber || subscriber.OfficeNumber ? `, каб. ${subscriber.officeNumber || subscriber.OfficeNumber}` : ''}
                 </div>
             ` : ''}
-            
+
+            ${(subscriber.workExperience || subscriber.WorkExperience) && (subscriber.workExperience || subscriber.WorkExperience) !== "Не указан" ? `
+                <div class="subscriber-experience">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Стаж: ${subscriber.workExperience || subscriber.WorkExperience}</span>
+                </div>
+            ` : ''}
+
             ${contacts.length > 0 ? `
                 <div class="contact-info">
                     ${contactsHtml}
@@ -654,8 +676,9 @@ class PhoneDirectoryApp {
         const department = subscriber.department || subscriber.Department || '';
         const building = subscriber.building || subscriber.Building || '';
         const officeNumber = subscriber.officeNumber || subscriber.OfficeNumber || '';
+        const workExperience = subscriber.workExperience || subscriber.WorkExperience || '';
         const contactInfos = subscriber.contactInfos || subscriber.ContactInfos || [];
-        
+
         const isAdmin = this.isCurrentUserAdmin();
         
         let contactsHtml = '';
@@ -763,12 +786,18 @@ class PhoneDirectoryApp {
                         <strong style="color: #4a5568; min-width: 120px; display: inline-block;">Кабинет:</strong>
                         ${this.escapeHtml(officeNumber) || 'Не указан'}
                     </div>
-                    
+                    ${workExperience && workExperience !== "Не указан" ? `
+                    <div class="detail-row" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0;">
+                        <strong style="color: #4a5568; min-width: 120px; display: inline-block;">Стаж работы:</strong>
+                        <span style="color: #667eea; font-weight: 600;">${this.escapeHtml(workExperience)}</span>
+                    </div>
+                    ` : ''}
+
                     <h3 style="margin-top: 25px; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 5px;">Контактная информация</h3>
                     <div class="contact-details">
                         ${contactsHtml}
                     </div>
-                    
+
                     ${adminActions}
                 </div>
             </div>
@@ -941,18 +970,25 @@ class PhoneDirectoryApp {
                         <div class="form-row" style="display: flex; gap: 15px; margin-bottom: 15px;">
                             <div class="form-col" style="flex: 1;">
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500;">Корпус:</label>
-                                <input type="text" id="edit-profile-building" 
-                                    value="${this.escapeHtml(profile.building || profile.Building || '')}" 
+                                <input type="text" id="edit-profile-building"
+                                    value="${this.escapeHtml(profile.building || profile.Building || '')}"
                                     class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
                             </div>
                             <div class="form-col" style="flex: 1;">
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500;">Кабинет:</label>
-                                <input type="text" id="edit-profile-office" 
-                                    value="${this.escapeHtml(profile.officeNumber || profile.OfficeNumber || '')}" 
+                                <input type="text" id="edit-profile-office"
+                                    value="${this.escapeHtml(profile.officeNumber || profile.OfficeNumber || '')}"
                                     class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
                             </div>
                         </div>
-                        
+
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Дата приема на работу:</label>
+                            <input type="date" id="edit-profile-hire-date"
+                                value="${profile.hireDate || profile.HireDate ? new Date(profile.hireDate || profile.HireDate).toISOString().split('T')[0] : ''}"
+                                class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
+                        </div>
+
                         <h3 style="margin-top: 20px; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 5px;">Контактная информация</h3>
                         <div id="profile-contacts-container">
                             ${contactsHtml}
@@ -1135,6 +1171,7 @@ class PhoneDirectoryApp {
             Department: document.getElementById('edit-profile-department').value,
             Building: document.getElementById('edit-profile-building').value,
             OfficeNumber: document.getElementById('edit-profile-office').value,
+            HireDate: document.getElementById('edit-profile-hire-date').value || null,
             ContactInfos: contactInfos
         };
     }
@@ -1393,16 +1430,22 @@ class PhoneDirectoryApp {
                         <div class="form-row" style="display: flex; gap: 15px; margin-bottom: 15px;">
                             <div class="form-col" style="flex: 1;">
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500;">Корпус:</label>
-                                <input type="text" id="create-building" 
+                                <input type="text" id="create-building"
                                        class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
                             </div>
                             <div class="form-col" style="flex: 1;">
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500;">Кабинет:</label>
-                                <input type="text" id="create-office" 
+                                <input type="text" id="create-office"
                                        class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
                             </div>
                         </div>
-                        
+
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Дата приема на работу:</label>
+                            <input type="date" id="create-hire-date"
+                                   class="form-input" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 5px;">
+                        </div>
+
                         <h3 style="margin-top: 20px; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 5px;">Контактная информация</h3>
                         <div id="create-contacts-container">
                             ${this.createContactFieldHtml()}
@@ -1484,6 +1527,7 @@ class PhoneDirectoryApp {
             Department: document.getElementById('create-department').value,
             Building: document.getElementById('create-building').value,
             OfficeNumber: document.getElementById('create-office').value,
+            HireDate: document.getElementById('create-hire-date')?.value || null,
             ContactInfos: contactInfos
         };
     }
