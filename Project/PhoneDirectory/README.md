@@ -4,6 +4,8 @@
 
 ## Структура проекта
 
+// Версия 1
+
 PhoneDirectory/
 ├── Controllers/         # API контроллеры  
 │   ├── AuthController.cs  
