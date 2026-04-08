@@ -2,10 +2,9 @@
 
 # Управление кадрами
 
-// Comment
 
 ## Структура проекта
-
+// Версия 2
 PhoneDirectory/
 ├── Controllers/         # API контроллеры  
 │   ├── AuthController.cs  
